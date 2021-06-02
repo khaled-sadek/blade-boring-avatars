@@ -13,6 +13,9 @@ Here I make a blade component to use in your laravel projects
 
 ## Installation
 
+```bash
+composer require khaled-sadek/blade-boring-avatars
+```
 
 ## Props
 
