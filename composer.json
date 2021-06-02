@@ -1,0 +1,49 @@
+{
+    "name": "khaled-sadek/blade-boring-avatars",
+    "description": "Blade components to auto generate boring avatars based on name",
+    "keywords": ["Blade", "UI", "Laravel"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Khaled Sadek",
+            "email": "khaled@theplanet.digital"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "ext-json": "*",
+        "illuminate/support": "^7.0|^8.0",
+        "illuminate/view": "^7.0|^8.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^5.0|^6.0",
+        "phpunit/phpunit": "^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "KhaledSadek\\BladeBoringAvatars\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "KhaledSadek\\BladeBoringAvatars\\BladeBoringAvatarsServiceProvider"
+            ]
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "@php ./vendor/bin/testbench package:discover --ansi"
+        ]
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
