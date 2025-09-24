@@ -46,19 +46,25 @@ class AvatarTest extends Orchestra
         $view = $this->blade('<x-Avatar />');
 
         // Baseline: keeps default size assertions implicitly from existing tests.
+        // Convert TestView to string before checking content
+        $viewContent = (string) $view;
+        
         // Check that output contains an SVG and some deterministic content (e.g., a path/rect/circle)
         $view->assertSee('<svg', false);
+        
         // Common boring-avatars output contains shapes; assert one appears
         $this->assertTrue(
-            str_contains($view, '<rect') || str_contains($view, '<circle') || str_contains($view, '<path'),
+            str_contains($viewContent, '<rect') || 
+            str_contains($viewContent, '<circle') || 
+            str_contains($viewContent, '<path'),
             'Expected at least one SVG shape element to be present'
         );
     }
 
     public function test_custom_name_seed_changes_rendered_output(): void
     {
-        $a = $this->blade('<x-Avatar name="alpha-seed" size="64" />');
-        $b = $this->blade('<x-Avatar name="beta-seed" size="64" />');
+        $a = (string) $this->blade('<x-Avatar name="alpha-seed" size="64" />');
+        $b = (string) $this->blade('<x-Avatar name="beta-seed" size="64" />');
 
         $this->assertNotSame($a, $b, 'Different name seeds should yield different avatar SVG output');
         $this->assertStringContainsString('width="64"', $a);
@@ -103,7 +109,7 @@ class AvatarTest extends Orchestra
         $customColors = ['#FF0000', '#00FF00', '#0000FF'];
         $view = $this->blade('<x-Avatar name="colors-seed" :colors="'.json_encode($customColors).'" />');
 
-        $rendered = $view;
+        $rendered = (string) $view;
         $colorFound = false;
 
         // Check if any of the custom colors appear in the SVG
@@ -138,8 +144,8 @@ class AvatarTest extends Orchestra
 
     public function test_square_toggle_changes_mask_shape_or_border_radius(): void
     {
-        $circleish = $this->blade('<x-Avatar name="seed" :square="false" />');
-        $squareish = $this->blade('<x-Avatar name="seed" :square="true" />');
+        $circleish = (string) $this->blade('<x-Avatar name="seed" :square="false" />');
+        $squareish = (string) $this->blade('<x-Avatar name="seed" :square="true" />');
 
         // They should differ, commonly via mask or shape selection
         $this->assertNotSame($circleish, $squareish);
@@ -155,7 +161,7 @@ class AvatarTest extends Orchestra
     {
         $view = $this->blade('<x-Avatar name="access-seed" title="Accessible Avatar" />');
 
-        $rendered = $view;
+        $rendered = (string) $view;
         // Either a title element, or aria-label/role attributes; search common patterns.
         $hasTitleTag = str_contains($rendered, '<title>Accessible Avatar</title>');
         $hasAria = str_contains($rendered, 'aria-label="Accessible Avatar"') || str_contains($rendered, 'role="img"');
@@ -166,12 +172,12 @@ class AvatarTest extends Orchestra
     public function test_invalid_or_empty_name_is_handled_gracefully(): void
     {
         // Empty name should still render deterministically without errors
-        $empty = $this->blade('<x-Avatar name="" />');
+        $empty = (string) $this->blade('<x-Avatar name="" />');
         $this->assertStringContainsString('<svg', $empty);
         $this->assertNotEmpty($empty);
 
         // Null name (omit prop) already covered by defaults; add explicit null-like case via Blade expression
-        $nullLike = $this->blade('<x-Avatar :name="null" />');
+        $nullLike = (string) $this->blade('<x-Avatar :name="null" />');
         $this->assertStringContainsString('<svg', $nullLike);
         $this->assertNotEmpty($nullLike);
     }
@@ -203,7 +209,7 @@ class AvatarTest extends Orchestra
     public function test_unknown_variant_falls_back_to_default_without_crashing(): void
     {
         $view = $this->blade('<x-Avatar name="seed" variant="unknown-variant-xyz" />');
-        $rendered = $view;
+        $rendered = (string) $view;
 
         $this->assertStringContainsString('<svg', $rendered);
         $this->assertNotEmpty($rendered);

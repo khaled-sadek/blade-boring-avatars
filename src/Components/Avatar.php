@@ -32,13 +32,18 @@ class Avatar extends Component
         $this->name = $name ?? 'Clara Barton';
         $this->title = $title;
         $this->variant = $variant;
-        $this->colors = $colors ?? [
+
+        // Default color palette
+        $defaultColors = [
             '#92A1C6',
             '#146A7C',
             '#F0AB3D',
             '#C271B4',
             '#C20D90',
         ];
+
+        // Use provided colors if it's a non-empty array, otherwise use default colors
+        $this->colors = (is_array($colors) && ! empty($colors)) ? $colors : $defaultColors;
     }
 
     public function render()
