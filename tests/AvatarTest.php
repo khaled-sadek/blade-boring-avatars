@@ -33,4 +33,12 @@ class AvatarTest extends Orchestra
         $view->assertSee('width="120"', false)
             ->assertSee('height="120"', false);
     }
+
+    public function test_the_lowercase_alias()
+    {
+        $view = $this->blade('<x-avatar size="64" />');
+
+        $view->assertSee('width="64"', false)
+            ->assertSee('height="64"', false);
+    }
 }

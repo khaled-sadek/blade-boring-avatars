@@ -26,6 +26,8 @@ class BladeBoringAvatarsServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views/components', 'blade-boring-avatars');
+        // Register aliases for the Avatar component (PascalCase and lowercase)
         Blade::component('Avatar', Avatar::class);
+        Blade::component('avatar', Avatar::class);
     }
 }

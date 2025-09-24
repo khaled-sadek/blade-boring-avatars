@@ -5,7 +5,7 @@ A Blade version of [Boring Avatars](https://github.com/boringdesigners/boring-av
 Based on Boring Avatar's description,
 > Boring Avatars a tiny JavaScript React library that generates custom, SVG-based, round avatars from any username and color palette.
 
-Here I make a blade component to use in your laravel projects
+This package provides a Blade component you can use directly in your Laravel projects.
 
 ## Features
 
@@ -16,6 +16,13 @@ Here I make a blade component to use in your laravel projects
 ```bash
 composer require khaled-sadek/blade-boring-avatars
 ```
+
+## Compatibility
+
+- Laravel: 7 – 12
+- PHP: 8.1+
+
+Note: The package auto-discovers its service provider. No manual registration is required.
 
 ## Props
 
@@ -34,7 +41,7 @@ Props:
 Basic usage (with default props):
 
 ```html
-<Avatar />
+<x-avatar />
 ```
 
 With props:
@@ -44,8 +51,10 @@ With props:
       view.blade.php
       Where $colors is php valid array
   -->
-  <Avatar size="80" name="Khaled Sadek" :colors="$colors" />
+  <x-avatar size="80" name="Khaled Sadek" :colors="$colors" />
 ```
+
+Backward compatibility: the PascalCase tag `<x-Avatar />` remains available.
 
 ## Credits
 
