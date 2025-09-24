@@ -15,6 +15,8 @@ class Avatar extends Component
     public string $name;
 
     public ?string $title;
+    
+    public string $variant;
 
     protected int $numberFromName = 0;
 
@@ -24,11 +26,12 @@ class Avatar extends Component
     /**
      * @param  string[]|null  $colors
      */
-    public function __construct(int $size = 40, ?string $name = null, ?array $colors = null, ?string $title = null)
+    public function __construct(int $size = 40, ?string $name = null, ?array $colors = null, ?string $title = null, string $variant = 'beam')
     {
         $this->size = $size;
         $this->name = $name ?? 'Clara Barton';
         $this->title = $title;
+        $this->variant = $variant;
         $this->colors = $colors ?? [
             '#92A1C6',
             '#146A7C',

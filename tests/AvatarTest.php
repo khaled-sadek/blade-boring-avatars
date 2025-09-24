@@ -69,14 +69,32 @@ class AvatarTest extends Orchestra
 
     public function test_variant_option_affects_output_structure(): void
     {
-        // Try a couple of common boring-avatars variants; adjust if the component restricts variants differently
-        $beam = $this->blade('<x-Avatar name="seed" variant="beam" />');
-        $marble = $this->blade('<x-Avatar name="seed" variant="marble" />');
+        // Test that different variants produce different outputs
+        $beam = (string) $this->blade('<x-Avatar name="seed" variant="beam" />');
+        $marble = (string) $this->blade('<x-Avatar name="seed" variant="marble" />');
+        $pixel = (string) $this->blade('<x-Avatar name="seed" variant="pixel" />');
+        $default = (string) $this->blade('<x-Avatar name="seed" />'); // Should default to 'beam'
 
-        $this->assertNotSame($beam, $marble, 'Different variants should render different SVG structures');
-        // Both should be valid SVGs
+        // Different variants should produce different outputs
+        $this->assertNotSame($beam, $marble, 'Beam and Marble variants should produce different outputs');
+        $this->assertNotSame($beam, $pixel, 'Beam and Pixel variants should produce different outputs');
+        
+        // Default should be the same as explicitly setting variant="beam"
+        $this->assertSame($beam, $default, 'Default variant should be the same as variant="beam"');
+        
+        // All should be valid SVGs
         $this->assertStringContainsString('<svg', $beam);
         $this->assertStringContainsString('<svg', $marble);
+        $this->assertStringContainsString('<svg', $pixel);
+        
+        // Test that the correct mask is being used
+        $this->assertStringContainsString('mask__beam', $beam);
+        $this->assertStringContainsString('mask__marble', $marble);
+        $this->assertStringContainsString('mask__pixel', $pixel);
+        
+        // Test that an unknown variant falls back to the default (beam)
+        $unknown = (string) $this->blade('<x-Avatar name="seed" variant="nonexistent" />');
+        $this->assertStringContainsString('mask__beam', $unknown, 'Unknown variant should fall back to beam');
     }
 
     public function test_colors_palette_is_applied_when_provided(): void
