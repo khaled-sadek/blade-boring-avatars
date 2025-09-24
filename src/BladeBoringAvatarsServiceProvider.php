@@ -19,7 +19,12 @@ class BladeBoringAvatarsServiceProvider extends ServiceProvider
     }
 
     /**
-     * Bootstrap services.
+     * Boot the package: load component views and register Blade component aliases.
+     *
+     * Loads view templates from the package's components directory under the
+     * "blade-boring-avatars" namespace, and registers the Avatar Blade component
+     * with both "Avatar" (PascalCase) and "avatar" (lowercase) aliases so it can
+     * be used from Blade templates in either form.
      *
      * @return void
      */
