@@ -53,7 +53,7 @@ With props:
 ```html
   <!--
       view.blade.php
-      Where $colors is php valid array
+      where $colors is a valid PHP array
   -->
   <x-avatar size="80" name="Khaled Sadek" :colors="$colors" />
 ```
