@@ -6,14 +6,19 @@ use KhaledSadek\BladeBoringAvatars\Helper;
 
 class Avatar extends Component
 {
+    /** @var string[] */
     public array $colors;
     public int $size;
     public string $name;
 
     protected int $numberFromName = 0;
 
+    /** @var array<string, mixed> */
     public array $avatarData = [];
 
+    /**
+     * @param string[]|null $colors
+     */
     public function __construct(int $size = 40, string $name = "Clara Barton", ?array $colors = null)
     {
         $this->size = $size;
@@ -34,7 +39,7 @@ class Avatar extends Component
         return view('blade-boring-avatars::avatar');
     }
 
-    public function generateData()
+    public function generateData(): void
     {
         $this->numberFromName = Helper::getNumber($this->name);
 

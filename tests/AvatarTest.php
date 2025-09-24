@@ -11,14 +11,14 @@ class AvatarTest extends Orchestra
 {
     use InteractsWithViews;
 
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [
             BladeBoringAvatarsServiceProvider::class,
         ];
     }
 
-    public function test_the_basic_component()
+    public function test_the_basic_component(): void
     {
         $view = $this->blade('<x-Avatar />');
     
@@ -26,7 +26,7 @@ class AvatarTest extends Orchestra
             ->assertSee('height="40"', false);
     }
 
-    public function test_the_size_option()
+    public function test_the_size_option(): void
     {
         $view = $this->blade('<x-Avatar size="120" />');
     
@@ -34,7 +34,7 @@ class AvatarTest extends Orchestra
             ->assertSee('height="120"', false);
     }
 
-    public function test_the_lowercase_alias()
+    public function test_the_lowercase_alias(): void
     {
         $view = $this->blade('<x-avatar size="64" />');
 

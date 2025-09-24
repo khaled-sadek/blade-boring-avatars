@@ -16,7 +16,10 @@ class Helper
         return $charactersCodesSum;
     }
 
-    public static function getRandomElement(int $number, array $array)
+    /**
+     * @param string[] $array
+     */
+    public static function getRandomElement(int $number, array $array): string
     {
         return $array[$number % count($array)];
     }
@@ -32,7 +35,7 @@ class Helper
 
     public static function getDigit(int $number, int $ntn) : int
     {
-        return floor(($number / pow(10, $ntn)) % 10);
+        return (int) floor(($number / pow(10, $ntn)) % 10);
     }
 
     public static function getContrast(string $color) : string
@@ -51,8 +54,8 @@ class Helper
         return 'white';
     }
 
-    public static function getBoolean(int $number, int $ntn) : int
+    public static function getBoolean(int $number, int $ntn) : bool
     {
-        return (!((self::getDigit($number, $ntn)) % 2));
+        return (self::getDigit($number, $ntn) % 2) === 0;
     }
 }
