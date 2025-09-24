@@ -15,7 +15,7 @@ class Avatar extends Component
     public string $name;
 
     public ?string $title;
-    
+
     public string $variant;
 
     protected int $numberFromName = 0;

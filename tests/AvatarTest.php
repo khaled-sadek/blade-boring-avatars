@@ -78,20 +78,20 @@ class AvatarTest extends Orchestra
         // Different variants should produce different outputs
         $this->assertNotSame($beam, $marble, 'Beam and Marble variants should produce different outputs');
         $this->assertNotSame($beam, $pixel, 'Beam and Pixel variants should produce different outputs');
-        
+
         // Default should be the same as explicitly setting variant="beam"
         $this->assertSame($beam, $default, 'Default variant should be the same as variant="beam"');
-        
+
         // All should be valid SVGs
         $this->assertStringContainsString('<svg', $beam);
         $this->assertStringContainsString('<svg', $marble);
         $this->assertStringContainsString('<svg', $pixel);
-        
+
         // Test that the correct mask is being used
         $this->assertStringContainsString('mask__beam', $beam);
         $this->assertStringContainsString('mask__marble', $marble);
         $this->assertStringContainsString('mask__pixel', $pixel);
-        
+
         // Test that an unknown variant falls back to the default (beam)
         $unknown = (string) $this->blade('<x-Avatar name="seed" variant="nonexistent" />');
         $this->assertStringContainsString('mask__beam', $unknown, 'Unknown variant should fall back to beam');
