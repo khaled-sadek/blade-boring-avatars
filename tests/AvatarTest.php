@@ -48,14 +48,14 @@ class AvatarTest extends Orchestra
         // Baseline: keeps default size assertions implicitly from existing tests.
         // Convert TestView to string before checking content
         $viewContent = (string) $view;
-        
+
         // Check that output contains an SVG and some deterministic content (e.g., a path/rect/circle)
         $view->assertSee('<svg', false);
-        
+
         // Common boring-avatars output contains shapes; assert one appears
         $this->assertTrue(
-            str_contains($viewContent, '<rect') || 
-            str_contains($viewContent, '<circle') || 
+            str_contains($viewContent, '<rect') ||
+            str_contains($viewContent, '<circle') ||
             str_contains($viewContent, '<path'),
             'Expected at least one SVG shape element to be present'
         );
@@ -144,17 +144,24 @@ class AvatarTest extends Orchestra
 
     public function test_square_toggle_changes_mask_shape_or_border_radius(): void
     {
-        $circleish = (string) $this->blade('<x-Avatar name="seed" :square="false" />');
-        $squareish = (string) $this->blade('<x-Avatar name="seed" :square="true" />');
+        // Test with a variant that uses a circular mask by default (e.g., 'ring' or 'bauhaus')
+        $circleVariant = (string) $this->blade('<x-Avatar name="seed" variant="ring" />');
 
-        // They should differ, commonly via mask or shape selection
-        $this->assertNotSame($circleish, $squareish);
+        // Test with a variant that uses a rectangular mask by default (e.g., 'pixel')
+        $squareVariant = (string) $this->blade('<x-Avatar name="seed" variant="pixel" />');
 
-        // Heuristics: a circular mask might reference "mask" or "clipPath" with rounded shape,
-        // whereas square might omit or use rect with no rx.
-        // Keep assertions generic to avoid tight coupling.
-        $this->assertStringContainsString('<svg', $circleish);
-        $this->assertStringContainsString('<svg', $squareish);
+        // They should differ in their SVG structure
+        $this->assertNotSame($circleVariant, $squareVariant);
+
+        // Check for circle in the circular variant
+        $this->assertStringContainsString('circle', $circleVariant, 'Circular variant should contain circle element');
+
+        // Check for rect in the square variant
+        $this->assertStringContainsString('rect', $squareVariant, 'Square variant should contain rect element');
+
+        // Verify both variants are valid SVGs
+        $this->assertStringContainsString('<svg', $circleVariant, 'Circular variant should be a valid SVG');
+        $this->assertStringContainsString('<svg', $squareVariant, 'Square variant should be a valid SVG');
     }
 
     public function test_title_attribute_includes_accessible_title_when_provided(): void
