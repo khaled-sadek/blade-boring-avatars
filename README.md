@@ -1,5 +1,7 @@
 # blade-boring-avatars
 
+[![tests](https://github.com/khaled-sadek/blade-boring-avatars/actions/workflows/tests.yml/badge.svg)](https://github.com/khaled-sadek/blade-boring-avatars/actions/workflows/tests.yml)
+
 A Blade version of [Boring Avatars](https://github.com/boringdesigners/boring-avatars). Built using Laravel Blade.
 
 Based on Boring Avatar's description,
