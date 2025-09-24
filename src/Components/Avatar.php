@@ -6,13 +6,13 @@ use KhaledSadek\BladeBoringAvatars\Helper;
 
 class Avatar extends Component
 {
-    public $colors;
-    public $size;
-    public $name;
+    public array $colors;
+    public int $size;
+    public string $name;
 
-    protected $numberFromName;
+    protected int $numberFromName = 0;
 
-    public $avatarData = [];
+    public array $avatarData = [];
 
     public function __construct(int $size = 40, string $name = "Clara Barton", ?array $colors = null)
     {
