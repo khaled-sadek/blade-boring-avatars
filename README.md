@@ -21,10 +21,12 @@ composer require khaled-sadek/blade-boring-avatars
 
 ## Compatibility
 
-- Laravel: 7 – 12
-- PHP: 8.1+
+- **PHP**: 8.2 or higher
+- **Laravel**: 10 – 12
 
-Note: The package auto-discovers its service provider. No manual registration is required.
+> **Note for Laravel 7-9 users**: If you're using an older version of Laravel, please use version 1.x of this package which supports PHP 8.1 and Laravel 7-9.
+
+This package auto-discovers its service provider, so no manual registration is required.
 
 ## Props
 
