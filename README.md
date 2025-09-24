@@ -1,11 +1,13 @@
 # blade-boring-avatars
 
+[![tests](https://github.com/khaled-sadek/blade-boring-avatars/actions/workflows/tests.yml/badge.svg)](https://github.com/khaled-sadek/blade-boring-avatars/actions/workflows/tests.yml)
+
 A Blade version of [Boring Avatars](https://github.com/boringdesigners/boring-avatars). Built using Laravel Blade.
 
 Based on Boring Avatar's description,
 > Boring Avatars a tiny JavaScript React library that generates custom, SVG-based, round avatars from any username and color palette.
 
-Here I make a blade component to use in your laravel projects
+This package provides a Blade component you can use directly in your Laravel projects.
 
 ## Features
 
@@ -16,6 +18,15 @@ Here I make a blade component to use in your laravel projects
 ```bash
 composer require khaled-sadek/blade-boring-avatars
 ```
+
+## Compatibility
+
+- **PHP**: 8.2 or higher
+- **Laravel**: 10 – 12
+
+> **Note for Laravel 7-9 users**: If you're using an older version of Laravel, please use version 1.x of this package which supports PHP 8.1 and Laravel 7-9.
+
+This package auto-discovers its service provider, so no manual registration is required.
 
 ## Props
 
@@ -34,7 +45,7 @@ Props:
 Basic usage (with default props):
 
 ```html
-<Avatar />
+<x-avatar />
 ```
 
 With props:
@@ -42,10 +53,12 @@ With props:
 ```html
   <!--
       view.blade.php
-      Where $colors is php valid array
+      where $colors is a valid PHP array
   -->
-  <Avatar size="80" name="Khaled Sadek" :colors="$colors" />
+  <x-avatar size="80" name="Khaled Sadek" :colors="$colors" />
 ```
+
+Backward compatibility: the PascalCase tag `<x-Avatar />` remains available.
 
 ## Credits
 

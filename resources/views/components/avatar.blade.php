@@ -5,23 +5,63 @@
         xmlns="http://www.w3.org/2000/svg"
         width="{{ $size }}"
         height="{{ $size }}"
+        role="img"
+        @if(isset($title))
+            aria-label="{{ $title }}"
+        @else
+            aria-hidden="true"
+        @endif
     >
+        @if(isset($title))
+            <title>{{ $title }}</title>
+        @endif
+        @php
+            // Define available variants and their mask IDs
+            $variants = [
+                'beam' => 'beam',
+                'marble' => 'marble',
+                'pixel' => 'pixel',
+                'sunset' => 'sunset',
+                'ring' => 'ring',
+                'bauhaus' => 'bauhaus'
+            ];
+            
+            // Use the provided variant or default to 'beam' if invalid
+            $variant = in_array($variant, array_keys($variants)) ? $variant : 'beam';
+            $maskId = 'mask__' . $variant;
+        @endphp
+        
         <mask
-            id="mask__beam"
+            id="{{ $maskId }}"
             maskUnits="userSpaceOnUse"
             x="0"
             y="0"
             width="36"
             height="36"
         >
+            @if($variant === 'beam' || $variant === 'marble')
             <rect
                 width="36"
                 height="36"
                 rx="20"
                 fill="white"
             />
+            @elseif($variant === 'pixel')
+            <rect
+                width="36"
+                height="36"
+                fill="white"
+            />
+            @else
+            <circle
+                cx="18"
+                cy="18"
+                r="18"
+                fill="white"
+            />
+            @endif
         </mask>
-        <g mask="url(#mask__beam)" fill="transparent">
+        <g mask="url(#{{ $maskId }})" fill="transparent">
             <rect
                 width="36"
                 height="36"
