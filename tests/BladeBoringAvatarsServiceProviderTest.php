@@ -127,4 +127,128 @@ class BladeBoringAvatarsServiceProviderTest extends Orchestra
             @unlink($tempPath);
         }
     }
+    public function test_namespaced_view_renders_non_empty(): void
+    {
+        // Prefer direct view rendering of the namespaced component view.
+        // Fallback to Blade string if direct view resolution differs by Laravel version.
+        $output = '';
+        try {
+            $output = view('blade-boring-avatars::components.avatar', ['name' => 'alpha'])->render();
+        } catch (\Throwable $_) {
+            $output = $this->renderBlade('@component("blade-boring-avatars::components.avatar", ["name" => "alpha"]) @endcomponent');
+        }
+        $this->assertIsString($output);
+        $this->assertNotSame('', trim($output), 'Expected namespaced avatar view to render some markup.');
+    }
+
+    public function test_direct_components_view_paths_render(): void
+    {
+        // Some Laravel setups allow resolving "components.avatar" if the namespace is registered as a hint.
+        // We try both dotted and kebab usage.
+        $ok = false;
+        try {
+            $out1 = view('blade-boring-avatars::components.avatar', ['name' => 'beta'])->render();
+            $this->assertNotSame('', trim($out1));
+            $ok = true;
+        } catch (\Throwable $_) {
+            // ignore
+        }
+
+        if (\!$ok) {
+            // Fallback to Blade component tags to demonstrate functional rendering.
+            $out2 = $this->renderBlade('<x-avatar name="beta" />');
+            $this->assertNotSame('', trim($out2));
+        }
+    }
+
+    public function test_provider_registration_is_idempotent(): void
+    {
+        // Registering the provider again should not break alias mappings nor rendering.
+        $this->app->register(\\KhaledSadek\\BladeBoringAvatars\\BladeBoringAvatarsServiceProvider::class);
+
+        $html1 = $this->renderBlade('<x-avatar name="gamma" />');
+        $this->assertNotSame('', trim($html1));
+
+        $html2 = $this->renderBlade('<x-Avatar name="delta" />');
+        $this->assertNotSame('', trim($html2));
+
+        // Validate aliases remain mapped to the Avatar class
+        $compiler = \\Illuminate\\Support\\Facades\\Blade::getFacadeRoot();
+        if (method_exists($compiler, 'getClassComponentAliases')) {
+            $aliases = $compiler->getClassComponentAliases();
+            $this->assertSame(\\KhaledSadek\\BladeBoringAvatars\\Components\\Avatar::class, $aliases['avatar'] ?? null);
+        }
+    }
+
+    public function test_component_accepts_common_attributes_without_error(): void
+    {
+        // Try a matrix of common props that the Avatar component is expected to tolerate.
+        // We do not assert on specific HTML, just that rendering is successful.
+        $variants = [
+            '<x-avatar name="epsilon" size="24" />',
+            '<x-avatar name="zeta" size="128" colors="#000,#fff" />',
+            '<x-avatar name="eta" square="true" />',
+            '<x-avatar name="theta" title="User Avatar" />',
+            '<x-avatar name="iota" variant="beam" />',
+            '<x-avatar name="kappa" variant="marble" />',
+        ];
+
+        foreach ($variants as $tpl) {
+            $html = $this->renderBlade($tpl);
+            $this->assertIsString($html, "Expected string output rendering for: {$tpl}");
+            $this->assertNotSame('', trim($html), "Expected non-empty output for: {$tpl}");
+        }
+    }
+
+    public function test_unicode_and_long_names_render_stably(): void
+    {
+        $cases = [
+            'José ⚡️',                                       // unicode with emoji and accent
+            str_repeat('longusername', 20),                  // very long name
+            "漢字かなカナ mixed — symbols ·· and dashes",     // CJK + punctuation
+        ];
+
+        foreach ($cases as $name) {
+            $html = $this->renderBlade('<x-avatar :name="$name" />'.PHP_EOL.'@php unset($name) @endphp');
+            // The above won't pass $name implicitly; use namespaced view as an alternative:
+            if (trim($html) === '') {
+                $html = view('blade-boring-avatars::components.avatar', ['name' => $name])->render();
+            }
+            $this->assertIsString($html);
+            $this->assertNotSame('', trim($html), "Expected rendering for name: {$name}");
+        }
+    }
+
+    public function test_invalid_attribute_types_are_tolerated(): void
+    {
+        // Pass intentionally odd values; component should not fatally error.
+        $payloads = [
+            ['name' => 12345],                   // non-string name
+            ['name' => null],                    // null name
+            ['name' => 'lambda', 'size' => 'x'], // non-numeric size
+            ['name' => 'mu', 'colors' => ['#f00', '#0f0', '#00f']], // array colors
+            ['name' => 'nu', 'square' => 1],     // int for boolean-ish prop
+        ];
+
+        foreach ($payloads as $data) {
+            try {
+                $html = view('blade-boring-avatars::components.avatar', $data)->render();
+            } catch (\\Throwable $e) {
+                // Fallback to Blade tag construction when direct view fails on certain versions
+                $attrs = [];
+                foreach ($data as $k => $v) {
+                    if (is_array($v)) {
+                        // Convert array to comma string for colors-like attributes
+                        $v = implode(',', $v);
+                    }
+                    $attrs[] = $v === null ? '' : $k.'="'.htmlspecialchars((string)$v, ENT_QUOTES).'"';
+                }
+                $tpl = '<x-avatar '.trim(implode(' ', array_filter($attrs))).' />';
+                $html = $this->renderBlade($tpl);
+            }
+
+            $this->assertIsString($html);
+            // Even if empty output is a valid behavior, at least ensure it didn't crash.
+        }
+    }
 }
