@@ -5,7 +5,16 @@
         xmlns="http://www.w3.org/2000/svg"
         width="{{ $size }}"
         height="{{ $size }}"
+        role="img"
+        @if(isset($title))
+            aria-label="{{ $title }}"
+        @else
+            aria-hidden="true"
+        @endif
     >
+        @if(isset($title))
+            <title>{{ $title }}</title>
+        @endif
         <mask
             id="mask__beam"
             maskUnits="userSpaceOnUse"

@@ -1,4 +1,5 @@
 <?php
+
 namespace KhaledSadek\BladeBoringAvatars\Components;
 
 use Illuminate\View\Component;
@@ -8,8 +9,12 @@ class Avatar extends Component
 {
     /** @var string[] */
     public array $colors;
+
     public int $size;
+
     public string $name;
+
+    public ?string $title;
 
     protected int $numberFromName = 0;
 
@@ -17,18 +22,19 @@ class Avatar extends Component
     public array $avatarData = [];
 
     /**
-     * @param string[]|null $colors
+     * @param  string[]|null  $colors
      */
-    public function __construct(int $size = 40, string $name = "Clara Barton", ?array $colors = null)
+    public function __construct(int $size = 40, ?string $name = null, ?array $colors = null, ?string $title = null)
     {
         $this->size = $size;
-        $this->name = $name;
+        $this->name = $name ?? 'Clara Barton';
+        $this->title = $title;
         $this->colors = $colors ?? [
             '#92A1C6',
             '#146A7C',
             '#F0AB3D',
             '#C271B4',
-            '#C20D90'
+            '#C20D90',
         ];
     }
 
@@ -59,7 +65,7 @@ class Avatar extends Component
         $this->avatarData['eyeSpread'] = Helper::getUnit($this->numberFromName, 5);
         $this->avatarData['mouthSpread'] = Helper::getUnit($this->numberFromName, 3);
         $this->avatarData['faceRotate'] = Helper::getUnit($this->numberFromName, 10, 3);
-        $this->avatarData['faceTranslateX'] = ($this->avatarData['wrapperTranslateX'] > $this->size/6) ? $this->avatarData['wrapperTranslateX'] / 2 : Helper::getUnit($this->numberFromName, 8, 1);
-        $this->avatarData['faceTranslateY'] = ($this->avatarData['wrapperTranslateY'] > $this->size/6) ? $this->avatarData['wrapperTranslateY'] / 2 : Helper::getUnit($this->numberFromName, 7, 2);
+        $this->avatarData['faceTranslateX'] = ($this->avatarData['wrapperTranslateX'] > $this->size / 6) ? $this->avatarData['wrapperTranslateX'] / 2 : Helper::getUnit($this->numberFromName, 8, 1);
+        $this->avatarData['faceTranslateY'] = ($this->avatarData['wrapperTranslateY'] > $this->size / 6) ? $this->avatarData['wrapperTranslateY'] / 2 : Helper::getUnit($this->numberFromName, 7, 2);
     }
 }
