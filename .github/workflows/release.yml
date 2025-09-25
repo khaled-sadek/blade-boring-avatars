@@ -1,0 +1,72 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*' # Matches tags like v1.0.0, v2.0.0, etc.
+
+jobs:
+  release:
+    name: Publish to Packagist
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer:v2
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Validate composer.json
+        run: composer validate --strict
+
+      - name: Install dependencies
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
+
+      - name: Run tests
+        run: vendor/bin/phpunit
+
+      - name: Build the package
+        run: composer install --no-dev --prefer-dist --optimize-autoloader
+
+      - name: Publish to Packagist
+        env:
+          PACKAGIST_TOKEN: ${{ secrets.PACKAGIST_TOKEN }}
+          PACKAGIST_USERNAME: ${{ secrets.PACKAGIST_USERNAME }}
+        run: |
+          # Only run if this is not a pre-release version
+          if [[ ! ${{ github.ref }} == *"-"* ]]; then
+            # Get the tag name without refs/tags/
+            VERSION=${GITHUB_REF#refs/tags/}
+            
+            # Configure git
+            git config --global user.name "GitHub Actions"
+            git config --global user.email "actions@github.com"
+            
+            # Create a zip archive of the package
+            git archive --format=zip --output=package.zip HEAD
+            
+            # Create a new release
+            curl -X POST https://packagist.org/api/update-package?username=${PACKAGIST_USERNAME}&apiToken=${PACKAGIST_TOKEN} \
+              -d '{"repository":{"url":"https://github.com/khaled-sadek/blade-boring-avatars"}}' \
+              -H "Content-Type: application/json"
+            
+            echo "Successfully triggered Packagist update for version ${VERSION}"
+          else
+            echo "Skipping Packagist publish for pre-release version"
+          fi
