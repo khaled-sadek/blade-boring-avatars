@@ -18,16 +18,16 @@ jobs:
       matrix:
         include:
           - laravel: "10.*"
-            testbench: "^8.0"
+            testbench: "^10.0"
             php: "8.2"
           - laravel: "11.*"
-            testbench: "^9.0"
+            testbench: "^11.0"
             php: "8.2"
           - laravel: "12.*"
-            testbench: "^10.0"
+            testbench: "^12.0"
             php: "8.3"
           - laravel: "12.*"
-            testbench: "^10.0"
+            testbench: "^12.0"
             php: "8.4"
 
     steps:
@@ -88,16 +88,16 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-php-8.4-laravel-12-testbench-10-composer-${{ hashFiles('**/composer.json') }}
+          key: ${{ runner.os }}-php-8.4-laravel-12-testbench-12-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: |
-            ${{ runner.os }}-php-8.4-laravel-12-testbench-10-composer-
+            ${{ runner.os }}-php-8.4-laravel-12-testbench-12-composer-
 
       - name: Validate composer.json
         run: composer validate --strict
 
       - name: Install dependencies (Laravel 12)
         run: |
-          composer update "illuminate/support:12.*" "orchestra/testbench:^10.0" \
+          composer update "illuminate/support:12.*" "orchestra/testbench:^12.0" \
             --with-all-dependencies --no-interaction --prefer-dist
 
       - name: Run PHPStan
@@ -126,16 +126,16 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-php-8.4-laravel-12-testbench-10-composer-${{ hashFiles('**/composer.json') }}
+          key: ${{ runner.os }}-php-8.4-laravel-12-testbench-12-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: |
-            ${{ runner.os }}-php-8.4-laravel-12-testbench-10-composer-
+            ${{ runner.os }}-php-8.4-laravel-12-testbench-12-composer-
 
       - name: Validate composer.json
         run: composer validate --strict
 
       - name: Install dependencies (Laravel 12)
         run: |
-          composer update "illuminate/support:12.*" "orchestra/testbench:^10.0" \
+          composer update "illuminate/support:12.*" "orchestra/testbench:^12.0" \
             --with-all-dependencies --no-interaction --prefer-dist
 
       - name: Run Pint (dry-run)
