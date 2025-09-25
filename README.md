@@ -1,6 +1,9 @@
 # blade-boring-avatars
 
 [![tests](https://github.com/khaled-sadek/blade-boring-avatars/actions/workflows/tests.yml/badge.svg)](https://github.com/khaled-sadek/blade-boring-avatars/actions/workflows/tests.yml)
+[![Latest Stable Version](https://poser.pugx.org/khaled-sadek/blade-boring-avatars/v)](//packagist.org/packages/khaled-sadek/blade-boring-avatars)
+[![Total Downloads](https://poser.pugx.org/khaled-sadek/blade-boring-avatars/downloads)](//packagist.org/packages/khaled-sadek/blade-boring-avatars)
+[![License](https://poser.pugx.org/khaled-sadek/blade-boring-avatars/license)](//packagist.org/packages/khaled-sadek/blade-boring-avatars)
 
 A Blade version of [Boring Avatars](https://github.com/boringdesigners/boring-avatars). Built using Laravel Blade.
 
@@ -22,9 +25,21 @@ composer require khaled-sadek/blade-boring-avatars
 ## Compatibility
 
 - **PHP**: 8.2 or higher
-- **Laravel**: 10 – 12
+- **Laravel**: 10.x, 11.x, 12.x
 
-> **Note for Laravel 7-9 users**: If you're using an older version of Laravel, please use version 1.x of this package which supports PHP 8.1 and Laravel 7-9.
+> **Note for Laravel 9.x and below users**: If you're using Laravel 9.x or below, please use version 1.x of this package which supports PHP 8.1 and Laravel 7-9.
+
+## Publishing to Packagist
+
+This package is set up to automatically publish to Packagist when a new Git tag is pushed. To enable this:
+
+1. Go to your Packagist account and get an API token from [your tokens page](https://packagist.org/profile/).
+2. In your GitHub repository, go to Settings > Secrets and variables > Actions
+3. Add the following repository secrets:
+   - `PACKAGIST_TOKEN`: Your Packagist API token
+   - `PACKAGIST_USERNAME`: Your Packagist username
+
+After setting up these secrets, pushing a new tag prefixed with `v` (for example, `v2.0.0`) will automatically trigger a new release on Packagist.
 
 This package auto-discovers its service provider, so no manual registration is required.
 
