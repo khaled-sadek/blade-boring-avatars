@@ -12,12 +12,12 @@
     "require": {
         "php": "^8.2",
         "ext-json": "*",
-        "illuminate/support": "^7.0|^8.0|^9.0|^10.0|^11.0|^12.0"
+        "illuminate/support": "^10.0|^11.0|^12.0"
     },
     "require-dev": {
         "laravel/pint": "^1.25.1",
         "nunomaduro/collision": "^7.0|^8.0|^9.0",
-        "orchestra/testbench": "^5.0|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
+        "orchestra/testbench": "^10.0|^11.0|^12.0",
         "phpstan/phpstan": "^1.11",
         "phpunit/phpunit": "^10.0|^11.0"
     },
@@ -46,6 +46,6 @@
     "config": {
         "sort-packages": true
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true
 }
