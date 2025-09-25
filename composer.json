@@ -2,7 +2,6 @@
     "name": "khaled-sadek/blade-boring-avatars",
     "description": "Blade components to auto generate boring avatars based on name",
     "keywords": ["Blade", "UI", "Laravel"],
-    "version": "2.0.0",
     "license": "MIT",
     "authors": [
         {
