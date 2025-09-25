@@ -39,7 +39,7 @@ This package is set up to automatically publish to Packagist when a new Git tag 
    - `PACKAGIST_TOKEN`: Your Packagist API token
    - `PACKAGIST_USERNAME`: Your Packagist username
 
-After setting up these secrets, pushing a new tag will automatically trigger a new release on Packagist.
+After setting up these secrets, pushing a new tag prefixed with `v` (for example, `v2.0.0`) will automatically trigger a new release on Packagist.
 
 This package auto-discovers its service provider, so no manual registration is required.
 
