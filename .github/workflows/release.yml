@@ -62,7 +62,7 @@ jobs:
             git archive --format=zip --output=package.zip HEAD
             
             # Create a new release
-            curl -X POST https://packagist.org/api/update-package?username=${PACKAGIST_USERNAME}&apiToken=${PACKAGIST_TOKEN} \
+            curl --fail-with-body -X POST https://packagist.org/api/update-package?username=${PACKAGIST_USERNAME}&apiToken=${PACKAGIST_TOKEN} \
               -d '{"repository":{"url":"https://github.com/khaled-sadek/blade-boring-avatars"}}' \
               -H "Content-Type: application/json"
             
