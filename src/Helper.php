@@ -47,7 +47,7 @@ class Helper
         $length = strlen($numberStr);
         $digitPosition = $length - 1 - $ntn;
 
-        if ($digitPosition < 0 || $digitPosition >= $length) {
+        if ($digitPosition < 0) {
             return 0;
         }
 

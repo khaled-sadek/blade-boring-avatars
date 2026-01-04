@@ -1,8 +1,12 @@
+includes:
+    - ./vendor/larastan/larastan/extension.neon
+
 parameters:
   level: max
   paths:
     - src
     - tests
+  treatPhpDocTypesAsCertain: false
   checkMissingTypehints: true
   reportUnmatchedIgnoredErrors: true
   tmpDir: build/phpstan

@@ -50,6 +50,7 @@ class Avatar extends Component
     {
         $this->generateData();
 
+        // @phpstan-ignore argument.type
         return view('blade-boring-avatars::avatar');
     }
 

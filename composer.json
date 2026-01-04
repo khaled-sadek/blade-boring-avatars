@@ -19,11 +19,12 @@
     "illuminate/support": "^10.0|^11.0|^12.0"
   },
   "require-dev": {
+    "larastan/larastan": "^3.8",
     "laravel/pint": "^1.25.1",
-    "nunomaduro/collision": "^7.0|^8.0|^9.0",
     "orchestra/testbench": "^8.0|^9.0|^10.0",
-    "phpstan/phpstan": "^2.0",
-    "phpunit/phpunit": "^10.0|^11.0"
+    "pestphp/pest": "^4.3",
+    "pestphp/pest-plugin-laravel": "^4.0",
+    "phpstan/phpstan": "^2.0"
   },
   "autoload": {
     "psr-4": {
@@ -48,7 +49,10 @@
     ]
   },
   "config": {
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
   },
   "minimum-stability": "stable",
   "prefer-stable": true
