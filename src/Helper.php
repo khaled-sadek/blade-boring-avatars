@@ -10,8 +10,13 @@ class Helper
         $charactersCodesSum = 0;
         foreach ($string as $char) {
             $char = mb_substr($char, 0);
-            [, $ret] = unpack('S', mb_convert_encoding($char, 'UTF-16LE'));
-            $charactersCodesSum += $ret;
+            $unpacked = unpack('S', mb_convert_encoding($char, 'UTF-16LE'));
+            if ($unpacked !== false) {
+                [, $ret] = $unpacked;
+                if (is_int($ret)) {
+                    $charactersCodesSum += $ret;
+                }
+            }
         }
 
         return $charactersCodesSum;

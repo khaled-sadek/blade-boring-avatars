@@ -28,7 +28,6 @@ class BladeBoringAvatarsServiceProviderTest extends Orchestra
         // Assert component can be resolved via lowercase alias registered by the provider.
         // Rendering ensures Blade registry is actually wired.
         $html = $this->renderBlade('<x-avatar name="john" />');
-        $this->assertIsString($html);
         $this->assertNotSame('', trim($html), 'Expected component to render some output for lowercase alias.');
     }
 
@@ -36,7 +35,6 @@ class BladeBoringAvatarsServiceProviderTest extends Orchestra
     {
         // Assert component can be resolved via PascalCase alias registered by the provider.
         $html = $this->renderBlade('<x-Avatar name="jane" />');
-        $this->assertIsString($html);
         $this->assertNotSame('', trim($html), 'Expected component to render some output for PascalCase alias.');
     }
 
@@ -45,6 +43,8 @@ class BladeBoringAvatarsServiceProviderTest extends Orchestra
         // Blade's component registration should include both aliases pointing to the Avatar class.
         // Different Laravel versions expose alias data differently; we try to be defensive.
         $compiler = Blade::getFacadeRoot();
+        $compiler = Blade::getFacadeRoot();
+        $this->assertIsObject($compiler);
         $aliases = [];
 
         if (method_exists($compiler, 'getClassComponentAliases')) {
@@ -80,9 +80,11 @@ class BladeBoringAvatarsServiceProviderTest extends Orchestra
 
         $paths = [];
         if (method_exists($finder, 'getHints')) {
-            $paths = $finder->getHints()['blade-boring-avatars'] ?? [];
+            $hints = (array) $finder->getHints();
+            $paths = $hints['blade-boring-avatars'] ?? [];
         } elseif (property_exists($finder, 'hints')) {
-            $paths = $finder->hints['blade-boring-avatars'] ?? [];
+            $hints = (array) $finder->hints;
+            $paths = $hints['blade-boring-avatars'] ?? [];
         }
 
         $this->assertIsArray($paths, 'Expected view hints array for namespace blade-boring-avatars.');
@@ -91,17 +93,19 @@ class BladeBoringAvatarsServiceProviderTest extends Orchestra
 
     public function test_rendering_with_missing_required_attributes_is_handled_gracefully(): void
     {
+        $this->expectNotToPerformAssertions();
+
         // Edge case: If the component expects props (e.g., "name"), rendering without them should not crash the app.
         // It may either render a default or empty output; we simply assert no exception and string output.
-        $html = $this->renderBlade('<x-avatar />');
-        $this->assertIsString($html);
+        $this->renderBlade('<x-avatar />');
     }
 
     public function test_unexpected_attributes_do_not_break_rendering(): void
     {
+        $this->expectNotToPerformAssertions();
+
         // Edge/failure tolerance: passing unexpected attributes should not fatally error.
-        $html = $this->renderBlade('<x-avatar unknown-attr="value" />');
-        $this->assertIsString($html);
+        $this->renderBlade('<x-avatar unknown-attr="value" />');
     }
 
     /**
@@ -109,22 +113,6 @@ class BladeBoringAvatarsServiceProviderTest extends Orchestra
      */
     private function renderBlade(string $blade): string
     {
-        // Using Blade::render available in newer Laravel, else fallback to a temp view render.
-        if (method_exists(Blade::class, 'render')) {
-            return Blade::render($blade);
-        }
-
-        // Fallback: create a temporary file-based view and render.
-        $tempViewName = '__temp__'.md5($blade.microtime(true));
-        $tempPath = sys_get_temp_dir().DIRECTORY_SEPARATOR.$tempViewName.'.blade.php';
-        file_put_contents($tempPath, $blade);
-
-        // Register temp path as a view location at runtime.
-        $this->app['view']->addLocation(dirname($tempPath));
-        try {
-            return view($tempViewName)->render();
-        } finally {
-            @unlink($tempPath);
-        }
+        return Blade::render($blade);
     }
 }
