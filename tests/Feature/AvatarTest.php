@@ -1,12 +1,13 @@
 <?php
 
-use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
+use Illuminate\Testing\TestView;
+use Tests\TestCase;
 
 uses()->group('avatar');
 
 test('the basic component', function () {
-    /** @var \Tests\TestCase $this */
-    /** @var \Illuminate\Testing\TestView $view */
+    /** @var TestCase $this */
+    /** @var TestView $view */
     $view = $this->blade('<x-Avatar />');
 
     $view->assertSee('width="40"', false)
@@ -14,8 +15,8 @@ test('the basic component', function () {
 });
 
 test('the size option', function () {
-    /** @var \Tests\TestCase $this */
-    /** @var \Illuminate\Testing\TestView $view */
+    /** @var TestCase $this */
+    /** @var TestView $view */
     $view = $this->blade('<x-Avatar size="120" />');
 
     $view->assertSee('width="120"', false)
@@ -23,8 +24,8 @@ test('the size option', function () {
 });
 
 test('the lowercase alias', function () {
-    /** @var \Tests\TestCase $this */
-    /** @var \Illuminate\Testing\TestView $view */
+    /** @var TestCase $this */
+    /** @var TestView $view */
     $view = $this->blade('<x-avatar size="64" />');
 
     $view->assertSee('width="64"', false)
@@ -32,8 +33,8 @@ test('the lowercase alias', function () {
 });
 
 test('it renders default variant and seed when no props provided', function () {
-    /** @var \Tests\TestCase $this */
-    /** @var \Illuminate\Testing\TestView $view */
+    /** @var TestCase $this */
+    /** @var TestView $view */
     $view = $this->blade('<x-Avatar />');
 
     // Baseline: keeps default size assertions implicitly from existing tests.
@@ -52,7 +53,7 @@ test('it renders default variant and seed when no props provided', function () {
 });
 
 test('custom name seed changes rendered output', function () {
-    /** @var \Tests\TestCase $this */
+    /** @var TestCase $this */
     $a = (string) $this->blade('<x-Avatar name="alpha-seed" size="64" />');
     $b = (string) $this->blade('<x-Avatar name="beta-seed" size="64" />');
 
@@ -62,7 +63,7 @@ test('custom name seed changes rendered output', function () {
 });
 
 test('variant option affects output structure', function () {
-    /** @var \Tests\TestCase $this */
+    /** @var TestCase $this */
     // Test that different variants produce different outputs
     $beam = (string) $this->blade('<x-Avatar name="seed" variant="beam" />');
     $marble = (string) $this->blade('<x-Avatar name="seed" variant="marble" />');
@@ -88,10 +89,10 @@ test('variant option affects output structure', function () {
 });
 
 test('colors palette is applied when provided', function () {
-    /** @var \Tests\TestCase $this */
+    /** @var TestCase $this */
     // Provide a small palette; the output should include at least one of these colors
     $customColors = ['#FF0000', '#00FF00', '#0000FF'];
-    /** @var \Illuminate\Testing\TestView $view */
+    /** @var TestView $view */
     $view = $this->blade('<x-Avatar name="colors-seed" :colors="'.json_encode($customColors).'" />');
 
     $rendered = (string) $view;
@@ -122,7 +123,7 @@ test('colors palette is applied when provided', function () {
 });
 
 test('square toggle changes mask shape or border radius', function () {
-    /** @var \Tests\TestCase $this */
+    /** @var TestCase $this */
     // Test with a variant that uses a circular mask by default (e.g., 'ring' or 'bauhaus')
     $circleVariant = (string) $this->blade('<x-Avatar name="seed" variant="ring" />');
 
@@ -140,8 +141,8 @@ test('square toggle changes mask shape or border radius', function () {
 });
 
 test('title attribute includes accessible title when provided', function () {
-    /** @var \Tests\TestCase $this */
-    /** @var \Illuminate\Testing\TestView $view */
+    /** @var TestCase $this */
+    /** @var TestView $view */
     $view = $this->blade('<x-Avatar name="access-seed" title="Accessible Avatar" />');
 
     $rendered = (string) $view;
@@ -153,16 +154,16 @@ test('title attribute includes accessible title when provided', function () {
 });
 
 test('invalid or empty name is handled gracefully', function () {
-    /** @var \Tests\TestCase $this */
+    /** @var TestCase $this */
     // Empty name should still render deterministically without errors
-    /** @var \Illuminate\Testing\TestView $emptyView */
+    /** @var TestView $emptyView */
     $emptyView = $this->blade('<x-Avatar name="" />');
     $empty = (string) $emptyView;
     expect($empty)->toContain('<svg');
     expect($empty)->not->toBeEmpty();
 
     // Null name (omit prop) already covered by defaults; add explicit null-like case via Blade expression
-    /** @var \Illuminate\Testing\TestView $nullView */
+    /** @var TestView $nullView */
     $nullView = $this->blade('<x-Avatar :name="null" />');
     $nullLike = (string) $nullView;
     expect($nullLike)->toContain('<svg');
@@ -170,23 +171,23 @@ test('invalid or empty name is handled gracefully', function () {
 });
 
 test('min and max size edges', function () {
-    /** @var \Tests\TestCase $this */
+    /** @var TestCase $this */
     // Very small size
-    /** @var \Illuminate\Testing\TestView $tiny */
+    /** @var TestView $tiny */
     $tiny = $this->blade('<x-Avatar size="1" />');
     $tiny->assertSee('width="1"', false)->assertSee('height="1"', false);
 
     // Large size
-    /** @var \Illuminate\Testing\TestView $large */
+    /** @var TestView $large */
     $large = $this->blade('<x-Avatar size="512" />');
     $large->assertSee('width="512"', false)->assertSee('height="512"', false);
 });
 
 test('lowercase alias supports all props like cased component', function () {
-    /** @var \Tests\TestCase $this */
-    /** @var \Illuminate\Testing\TestView $lower */
+    /** @var TestCase $this */
+    /** @var TestView $lower */
     $lower = $this->blade('<x-avatar name="alias-seed" variant="beam" size="80" :square="true" />');
-    /** @var \Illuminate\Testing\TestView $cased */
+    /** @var TestView $cased */
     $cased = $this->blade('<x-Avatar name="alias-seed" variant="beam" size="80" :square="true" />');
 
     // Convert both to strings to compare the rendered output
@@ -198,8 +199,8 @@ test('lowercase alias supports all props like cased component', function () {
 });
 
 test('unknown variant falls back to default without crashing', function () {
-    /** @var \Tests\TestCase $this */
-    /** @var \Illuminate\Testing\TestView $view */
+    /** @var TestCase $this */
+    /** @var TestView $view */
     $view = $this->blade('<x-Avatar name="seed" variant="unknown-variant-xyz" />');
     $rendered = (string) $view;
 

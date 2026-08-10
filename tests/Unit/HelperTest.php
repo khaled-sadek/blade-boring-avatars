@@ -64,4 +64,4 @@ it('calculates contrast color', function () {
 
 it('throws exception for zero range', function () {
     Helper::getUnit(5, 0);
-})->throws(\InvalidArgumentException::class, 'Range must not be zero');
+})->throws(InvalidArgumentException::class, 'Range must not be zero');

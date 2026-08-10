@@ -3,3 +3,4 @@ phpunit.xml
 .phpunit.result.cache
 build/
 .phpunit.cache/
+composer.lock

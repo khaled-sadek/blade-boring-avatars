@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
+use Illuminate\View\Compilers\BladeCompiler;
 use KhaledSadek\BladeBoringAvatars\Components\Avatar;
 
 test('it registers avatar component alias lowercase', function () {
@@ -21,7 +22,7 @@ test('blade aliases map to avatar class', function () {
     // Blade's component registration should include both aliases pointing to the Avatar class.
     // Different Laravel versions expose alias data differently; we try to be defensive.
     $compiler = Blade::getFacadeRoot();
-    /** @var \Illuminate\View\Compilers\BladeCompiler $compiler */
+    /** @var BladeCompiler $compiler */
     expect($compiler)->toBeObject();
     $aliases = [];
 
@@ -41,7 +42,7 @@ test('blade aliases map to avatar class', function () {
         $aliases = (function () {
             return $this->classComponentAliases;
         })->call($compiler);
-        
+
         /** @var array<string, mixed> $aliases */
         expect($aliases)->toBeArray();
         assert(is_array($aliases));
@@ -70,7 +71,7 @@ test('views are loaded from package namespace', function () {
         $hints = (array) $finder->hints;
         $paths = $hints['blade-boring-avatars'] ?? [];
     }
-    
+
     /** @var array<int, string> $paths */
     expect($paths)->toBeArray('Expected view hints array for namespace blade-boring-avatars.');
     expect($paths)->not->toBeEmpty('Expected at least one view path to be registered for blade-boring-avatars.');
@@ -81,12 +82,12 @@ test('rendering with missing required attributes is handled gracefully', functio
     // It may either render a default or empty output; we simply assert no exception and string output.
     expect(function () {
         Blade::render('<x-avatar />');
-    })->not->toThrow(\Throwable::class);
+    })->not->toThrow(Throwable::class);
 });
 
 test('unexpected attributes do_not break rendering', function () {
     // Edge/failure tolerance: passing unexpected attributes should not fatally error.
     expect(function () {
         Blade::render('<x-avatar unknown-attr="value" />');
-    })->not->toThrow(\Throwable::class);
+    })->not->toThrow(Throwable::class);
 });
