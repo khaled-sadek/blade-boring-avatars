@@ -61,7 +61,7 @@ jobs:
 
       - name: Install dependencies (Laravel ${{ matrix.laravel }})
         run: |
-          composer require "illuminate/support:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
+          composer require "illuminate/support:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --dev --no-interaction --no-update
           composer update --prefer-dist --no-interaction
 
       - name: Run tests
@@ -99,7 +99,7 @@ jobs:
 
       - name: Install dependencies (Laravel 12)
         run: |
-          composer require "illuminate/support:12.*" "orchestra/testbench:^10.0" --no-interaction --no-update
+          composer require "illuminate/support:12.*" "orchestra/testbench:^10.0" --dev --no-interaction --no-update
           composer update --prefer-dist --no-interaction
 
       - name: Run PHPStan
@@ -137,7 +137,7 @@ jobs:
 
       - name: Install dependencies (Laravel 12)
         run: |
-          composer require "illuminate/support:12.*" "orchestra/testbench:^10.0" --no-interaction --no-update
+          composer require "illuminate/support:12.*" "orchestra/testbench:^10.0" --dev --no-interaction --no-update
           composer update --prefer-dist --no-interaction
 
       - name: Run Pint (dry-run)
