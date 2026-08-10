@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
 use KhaledSadek\BladeBoringAvatars\BladeBoringAvatarsServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
@@ -10,7 +11,7 @@ use Orchestra\Testbench\TestCase as Orchestra;
  */
 abstract class TestCase extends Orchestra
 {
-    use \Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
+    use InteractsWithViews;
 
     protected function getPackageProviders($app): array
     {
