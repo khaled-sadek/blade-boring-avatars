@@ -65,7 +65,7 @@ jobs:
             --with-all-dependencies --no-interaction --prefer-dist
 
       - name: Run tests
-        run: vendor/bin/phpunit
+        run: vendor/bin/pest
 
   analysis:
     name: PHPStan (PHP 8.4 / Laravel 12)
